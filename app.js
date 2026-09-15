@@ -252,10 +252,12 @@
 
   // ----- colour scheme -----
 
-  var THEMES = ['amber', 'flag', 'mono', 'evergreen', 'chalk', 'dusk'];
+  var THEMES = ['old-glory', 'mono', 'pnw', 'norcal', 'socal', 'rockies', 'texas',
+    'new-england', 'new-york', 'florida', 'chicago', 'hawaii', 'alaska'];
+  var DEFAULT_THEME = 'old-glory';
 
   function applyTheme(name) {
-    if (THEMES.indexOf(name) === -1) name = 'amber';
+    if (THEMES.indexOf(name) === -1) name = DEFAULT_THEME;
     body.dataset.theme = name;
     themeButtons.forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.dataset.theme === name));
@@ -273,7 +275,7 @@
     b.addEventListener('click', function () { applyTheme(b.dataset.theme); });
   });
 
-  applyTheme(load(THEME_KEY, 'amber'));
+  applyTheme(load(THEME_KEY, DEFAULT_THEME));
 
   // ----- settings sheet -----
 

@@ -19,21 +19,25 @@
   --filled: color-mix(in srgb, var(--level) calc(var(--level-alpha) * 100%), var(--bg));
 }
 
-/* Colour schemes. Each one sets the focus look, then the break look.
+/* Colour schemes: one for the flag, one plain, eleven for the regions.
+   Each block sets the focus look, then the break look. Optional art:
+   --sky paints the open background, --level-art paints the level, and
+   --edge cuts the level's top edge with a mask (trees, peaks).
    The same rules paint the swatches in the settings sheet. */
 
-:root, [data-theme="amber"] {
-  --bg: #1c2140; --level: #e9a23b; --level-alpha: 0.72; --ink: #f5f1e8;
-}
-[data-theme="amber"].break {
-  --bg: #1d3a35; --level: #8ad4bb; --level-alpha: 0.42;
+:root {
+  --bg: #0a3161; --level: #b31942; --level-alpha: 1; --ink: #ffffff;
+  --sky: none; --level-art: none; --edge: none; --edge-h: 0px;
 }
 
-[data-theme="flag"] {
-  --bg: #0b2a5b; --level: #c8102e; --level-alpha: 0.88; --ink: #ffffff;
+[data-theme="old-glory"] {
+  --bg: #0a3161; --level: #b31942; --level-alpha: 1; --ink: #ffffff;
+  --sky: url("art/stars.svg"); --sky-size: 96px 96px;
+  --level-art: repeating-linear-gradient(to top, transparent 0 7.69vh, rgba(255, 255, 255, 0.16) 7.69vh 15.38vh);
 }
-[data-theme="flag"].break {
-  --bg: #ffffff; --level: #0b2a5b; --level-alpha: 0.2; --ink: #0b2a5b;
+[data-theme="old-glory"].break {
+  --bg: #ffffff; --level: #0a3161; --level-alpha: 0.18; --ink: #0a3161;
+  --sky: none; --level-art: none;
 }
 
 [data-theme="mono"] {
@@ -43,25 +47,92 @@
   --bg: #ffffff; --level: #000000; --level-alpha: 0.1; --ink: #000000;
 }
 
-[data-theme="evergreen"] {
-  --bg: #0f2b22; --level: #3f7d5a; --level-alpha: 0.8; --ink: #eef3ee;
+[data-theme="pnw"] {
+  --bg: #10261d; --level: #2f6b4f; --level-alpha: 0.9; --ink: #e9efe6;
+  --edge: url("art/treeline.svg"); --edge-h: 44px;
 }
-[data-theme="evergreen"].break {
-  --bg: #2b3d46; --level: #9fbecb; --level-alpha: 0.42;
-}
-
-[data-theme="chalk"] {
-  --bg: #ededea; --level: #bcc3c9; --level-alpha: 0.85; --ink: #17191c;
-}
-[data-theme="chalk"].break {
-  --bg: #e4ebe6; --level: #a4c4b0; --level-alpha: 0.7;
+[data-theme="pnw"].break {
+  --bg: #24343c; --level: #8fb3c2; --level-alpha: 0.45;
+  --edge: none;
 }
 
-[data-theme="dusk"] {
-  --bg: #2a1b3d; --level: #e0708a; --level-alpha: 0.7; --ink: #fbeff2;
+[data-theme="norcal"] {
+  --bg: #d5dde1; --level: #f04a00; --level-alpha: 0.82; --ink: #1d1714;
 }
-[data-theme="dusk"].break {
-  --bg: #1f2a44; --level: #8fa8e8; --level-alpha: 0.5;
+[data-theme="norcal"].break {
+  --bg: #3a2a22; --level: #8a5237; --level-alpha: 0.85; --ink: #f2e8dc;
+}
+
+[data-theme="socal"] {
+  --bg: #3b1f4a; --level: #f28c3a; --level-alpha: 0.9; --ink: #fff4e6;
+  --sky: radial-gradient(circle at 78% 30%, #ffd166 0 46px, rgba(255, 209, 102, 0.35) 47px 60px, transparent 61px);
+  --sky-repeat: no-repeat;
+}
+[data-theme="socal"].break {
+  --bg: #8ed0e6; --level: #f3dfae; --level-alpha: 0.95; --ink: #1e2f3a;
+  --sky: none;
+}
+
+[data-theme="rockies"] {
+  --bg: #16213a; --level: #5b6f8f; --level-alpha: 0.92; --ink: #eef2f7;
+  --edge: url("art/peaks.svg"); --edge-h: 56px;
+}
+[data-theme="rockies"].break {
+  --bg: #e8eef5; --level: #a9bdd6; --level-alpha: 0.8; --ink: #1f2a3d;
+}
+
+[data-theme="texas"] {
+  --bg: #00205b; --level: #bf0a30; --level-alpha: 1; --ink: #ffffff;
+  --sky: url("art/lone-star.svg"); --sky-size: 150px 150px; --sky-repeat: no-repeat; --sky-position: center 18%;
+}
+[data-theme="texas"].break {
+  --bg: #e9e4d8; --level: #5b62b5; --level-alpha: 0.6; --ink: #1c1a2b;
+  --sky: none;
+}
+
+[data-theme="new-england"] {
+  --bg: #2b1d1a; --level: #c8502e; --level-alpha: 0.88; --ink: #f6ecdc;
+}
+[data-theme="new-england"].break {
+  --bg: #22303a; --level: #a8bcc4; --level-alpha: 0.5; --ink: #f0f4f5;
+}
+
+[data-theme="new-york"] {
+  --bg: #d9d9d2; --level: #f2b705; --level-alpha: 0.95; --ink: #121212;
+}
+[data-theme="new-york"].break {
+  --bg: #1c1f26; --level: #3f4a6b; --level-alpha: 0.85; --ink: #f2f2f2;
+}
+
+[data-theme="florida"] {
+  --bg: #bfe9f2; --level: #ff8c69; --level-alpha: 0.9; --ink: #1d2b33;
+}
+[data-theme="florida"].break {
+  --bg: #d9f2ec; --level: #ffd166; --level-alpha: 0.8; --ink: #13343a;
+}
+
+[data-theme="chicago"] {
+  --bg: #0c0c0e; --level: #55606b; --level-alpha: 0.8; --ink: #ececec;
+  --sky: url("art/chicago-stars.svg"); --sky-size: 200px 50px; --sky-repeat: no-repeat; --sky-position: center 14%;
+}
+[data-theme="chicago"].break {
+  --bg: #b3ddf2; --level: #7fb4d1; --level-alpha: 0.6; --ink: #0c1a22;
+}
+
+[data-theme="hawaii"] {
+  --bg: #0f3d5c; --level: #1f8f86; --level-alpha: 0.85; --ink: #f4fbf9;
+}
+[data-theme="hawaii"].break {
+  --bg: #fff4e6; --level: #ffb7c5; --level-alpha: 0.9; --ink: #3a2330;
+}
+
+[data-theme="alaska"] {
+  --bg: #0f204b; --level: #3ddc97; --level-alpha: 0.55; --ink: #ffffff;
+  --sky: url("art/dipper.svg"); --sky-size: 220px 165px; --sky-repeat: no-repeat; --sky-position: right 6% top 7%;
+}
+[data-theme="alaska"].break {
+  --bg: #e8eef3; --level: #a9c6d9; --level-alpha: 0.8; --ink: #14243a;
+  --sky: none;
 }
 
 * { box-sizing: border-box; }
@@ -73,7 +144,11 @@ html, body {
 
 body {
   font-family: var(--font);
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: var(--sky, none);
+  background-size: var(--sky-size, auto);
+  background-repeat: var(--sky-repeat, repeat);
+  background-position: var(--sky-position, 0 0);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
@@ -92,13 +167,31 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 100%;
-  background: var(--level);
+  height: calc(var(--progress, 1) * 100%);
+  background-color: var(--level);
+  background-image: var(--level-art, none);
   opacity: var(--level-alpha);
-  transform-origin: bottom;
-  transform: scaleY(var(--progress, 1));
-  transition: transform 1000ms linear, background-color 600ms ease;
+  transition: height 1000ms linear, background-color 600ms ease;
   pointer-events: none;
+}
+
+/* Some regions cut the level's top edge into a silhouette. */
+.level::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: var(--edge-h, 0px);
+  background: var(--level);
+  -webkit-mask-image: var(--edge, none);
+  -webkit-mask-repeat: repeat-x;
+  -webkit-mask-position: bottom;
+  -webkit-mask-size: auto 100%;
+  mask-image: var(--edge, none);
+  mask-repeat: repeat-x;
+  mask-position: bottom;
+  mask-size: auto 100%;
 }
 
 body.paused .level {
@@ -339,6 +432,10 @@ input:focus-visible {
   padding: 24px 24px max(24px, env(safe-area-inset-bottom));
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
   color: var(--ink);
+  /* Resolved here so the swatches, which carry their own scheme, inherit
+     the sheet's colours for their selection ring. */
+  --ring: var(--ink);
+  --sheet-bg: var(--sheet);
 }
 
 @media (min-width: 720px) {
@@ -442,16 +539,17 @@ kbd {
   display: grid;
   gap: 6px;
   justify-items: center;
-  padding: 4px 4px 6px;
-  border-radius: 16px;
-  font-size: 0.85rem;
+  align-content: start;
+  font-size: 0.8rem;
   font-weight: 500;
+  line-height: 1.2;
   color: var(--ink-soft);
 }
 
-.themes button[aria-pressed="true"] {
-  color: var(--ink);
-  box-shadow: 0 0 0 2px var(--ink);
+.themes button[aria-pressed="true"] { color: var(--ink); }
+
+.themes button[aria-pressed="true"] .swatch {
+  box-shadow: 0 0 0 2px var(--sheet-bg), 0 0 0 4px var(--ring);
 }
 
 .themes .swatch {
@@ -460,6 +558,7 @@ kbd {
   border-radius: 12px;
   background: linear-gradient(var(--bg) 0 46%, var(--filled) 46%);
   box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.35);
+  transition: box-shadow 120ms ease;
 }
 
 /* ----- utilities ----- */

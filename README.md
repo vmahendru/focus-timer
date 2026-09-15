@@ -64,10 +64,13 @@ Type your one task at the top. Press Start. That is the whole app.
 | T | Edit the task |
 
 Session lengths, the chime, notifications and the colour scheme are under the
-gear icon. Six schemes ship: Amber, Old Glory, Monochrome, Evergreen, Chalk
-and Dusk. Each one paints focus and break sessions differently. To add your
-own, copy one of the `[data-theme]` blocks in `style.css`, give it a name, and
-add a matching button in the Colours section of `index.html`.
+gear icon. Thirteen schemes ship: Old Glory, Monochrome, and eleven drawn from
+American regions: Pacific Northwest, Northern California, Southern California,
+Rockies, Texas, New England, New York, Florida, Chicago noir, Hawaii and
+Alaska. Each one paints focus and break sessions differently, and a few carry
+a little scenery: stars, a treeline, a mountain ridge. To add your own, copy
+one of the `[data-theme]` blocks in `style.css`, give it a name, and add a
+matching button in the Colours section of `index.html`.
 Defaults are 25 minutes of focus, 5 minutes of short break and a 15 minute
 long break after every 4 sessions. Dots under the clock count focus sessions
 finished today.

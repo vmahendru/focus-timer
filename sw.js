@@ -1,5 +1,5 @@
 // Offline cache. Bump VERSION whenever any of the listed files changes.
-const VERSION = 'focus-v3';
+const VERSION = 'focus-v4';
 const FILES = [
   './',
   './index.html',
@@ -11,7 +11,13 @@ const FILES = [
   './icons/icon-180.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/icon-512-maskable.png'
+  './icons/icon-512-maskable.png',
+  './art/stars.svg',
+  './art/lone-star.svg',
+  './art/chicago-stars.svg',
+  './art/dipper.svg',
+  './art/treeline.svg',
+  './art/peaks.svg'
 ];
 
 self.addEventListener('install', (event) => {
