@@ -5,7 +5,7 @@
   var STATE_KEY = 'focus.state';
   var TASK_KEY = 'focus.task';
   var THEME_KEY = 'focus.theme';
-  var APP_VERSION = '5';
+  var APP_VERSION = '6';
 
   var $ = function (sel) { return document.querySelector(sel); };
   var body = document.body;
@@ -253,11 +253,15 @@
 
   // ----- colour scheme -----
 
-  var THEMES = ['old-glory', 'mono', 'pnw', 'norcal', 'socal', 'rockies', 'texas',
-    'new-england', 'new-york', 'florida', 'chicago', 'hawaii', 'alaska'];
-  var DEFAULT_THEME = 'old-glory';
+  var THEMES = ['spirit', 'mono', 'rainier', 'gate', 'summer', 'rockies', 'texas',
+    'foliage', 'empire', 'sunshine', 'windy', 'aloha', 'frontier'];
+  var DEFAULT_THEME = 'spirit';
+  // Names from before the scenes, so a saved choice carries over.
+  var RENAMED = { 'old-glory': 'spirit', pnw: 'rainier', norcal: 'gate', socal: 'summer', 'new-england': 'foliage',
+    'new-york': 'empire', florida: 'sunshine', chicago: 'windy', hawaii: 'aloha', alaska: 'frontier' };
 
   function applyTheme(name) {
+    name = RENAMED[name] || name;
     if (THEMES.indexOf(name) === -1) name = DEFAULT_THEME;
     body.dataset.theme = name;
     themeButtons.forEach(function (b) {

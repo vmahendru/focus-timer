@@ -19,120 +19,159 @@
   --filled: color-mix(in srgb, var(--level) calc(var(--level-alpha) * 100%), var(--bg));
 }
 
-/* Colour schemes: one for the flag, one plain, eleven for the regions.
-   Each block sets the focus look, then the break look. Optional art:
-   --sky paints the open background, --level-art paints the level, and
-   --edge cuts the level's top edge with a mask (trees, peaks).
-   The same rules paint the swatches in the settings sheet. */
+body {
+  --far: color-mix(in srgb, var(--ink) 32%, var(--bg));
+  --peak: color-mix(in srgb, #fff 55%, var(--far));
+  --mid: color-mix(in srgb, #000 30%, var(--bg));
+  --near: color-mix(in srgb, #000 65%, var(--bg));
+}
+
+/* Colour schemes. One for the flag, one plain, eleven for the regions.
+   Each block sets the focus look, then the break look. A scene is up to
+   four silhouette layers (far, peak, mid, near) drawn by tools/scenes.py
+   and coloured here: --far, --peak, --mid and --near default to mixes of
+   the scheme's own ink and background, and can be overridden.
+   --sky paints the open background. The same rules paint the swatches. */
 
 :root {
   --bg: #0a3161; --level: #b31942; --level-alpha: 1; --ink: #ffffff;
-  --sky: none; --level-art: none; --edge: none; --edge-h: 0px;
+  --sky: none; --level-art: none;
+  --scene-far: linear-gradient(transparent, transparent);
+  --scene-peak: linear-gradient(transparent, transparent);
+  --scene-mid: linear-gradient(transparent, transparent);
+  --scene-near: linear-gradient(transparent, transparent);
+  --stage-h: max(60vh, 520px);
 }
 
-[data-theme="old-glory"] {
+[data-theme="spirit"] {
   --bg: #0a3161; --level: #b31942; --level-alpha: 1; --ink: #ffffff;
   --sky: url("art/stars.svg"); --sky-size: 96px 96px;
   --level-art: repeating-linear-gradient(to top, transparent 0 7.69vh, rgba(255, 255, 255, 0.16) 7.69vh 15.38vh);
+  --scene-far: url("art/spirit-far.svg"); --scene-mid: url("art/spirit-mid.svg"); --scene-near: url("art/spirit-near.svg");
+  --far: #d9dde6; --mid: #24406e; --near: #061b3a;
 }
-[data-theme="old-glory"].break {
+[data-theme="spirit"].break {
   --bg: #ffffff; --level: #0a3161; --level-alpha: 0.18; --ink: #0a3161;
   --sky: none; --level-art: none;
+  --far: #8fa3c4; --mid: #b31942; --near: #0a3161;
 }
 
 [data-theme="mono"] {
   --bg: #000000; --level: #ffffff; --level-alpha: 0.18; --ink: #ffffff;
+  --stage-h: 100%;
 }
 [data-theme="mono"].break {
   --bg: #ffffff; --level: #000000; --level-alpha: 0.1; --ink: #000000;
 }
 
-[data-theme="pnw"] {
+[data-theme="rainier"] {
   --bg: #10261d; --level: #2f6b4f; --level-alpha: 0.9; --ink: #e9efe6;
-  --edge: url("art/treeline.svg"); --edge-h: 44px;
+  --scene-far: url("art/rainier-far.svg"); --scene-peak: url("art/rainier-peak.svg"); --scene-mid: url("art/rainier-mid.svg"); --scene-near: url("art/rainier-near.svg");
+  --far: #6f8f9c; --peak: #e4eef0; --mid: #1d4a3d; --near: #071510;
 }
-[data-theme="pnw"].break {
+[data-theme="rainier"].break {
   --bg: #24343c; --level: #8fb3c2; --level-alpha: 0.45;
-  --edge: none;
+  --far: #7f9ba6; --peak: #eef4f6; --mid: #3a5b66; --near: #121e24;
 }
 
-[data-theme="norcal"] {
+[data-theme="gate"] {
   --bg: #d5dde1; --level: #f04a00; --level-alpha: 0.82; --ink: #1d1714;
+  --scene-far: url("art/gate-far.svg"); --scene-mid: url("art/gate-mid.svg"); --scene-near: url("art/gate-near.svg");
+  --far: #9fb0b8; --mid: #f04a00; --near: #2b3a2e;
 }
-[data-theme="norcal"].break {
+[data-theme="gate"].break {
   --bg: #3a2a22; --level: #8a5237; --level-alpha: 0.85; --ink: #f2e8dc;
+  --far: #6b5347; --mid: #f04a00; --near: #1a120e;
 }
 
-[data-theme="socal"] {
+[data-theme="summer"] {
   --bg: #3b1f4a; --level: #f28c3a; --level-alpha: 0.9; --ink: #fff4e6;
-  --sky: radial-gradient(circle at 78% 30%, #ffd166 0 46px, rgba(255, 209, 102, 0.35) 47px 60px, transparent 61px);
-  --sky-repeat: no-repeat;
+  --scene-far: url("art/summer-far.svg"); --scene-peak: url("art/summer-peak.svg"); --scene-mid: url("art/summer-mid.svg"); --scene-near: url("art/summer-near.svg");
+  --far: #7a3f6a; --peak: #ffd166; --mid: #2a5d7c; --near: #1a0f24;
 }
-[data-theme="socal"].break {
+[data-theme="summer"].break {
   --bg: #8ed0e6; --level: #f3dfae; --level-alpha: 0.95; --ink: #1e2f3a;
-  --sky: none;
+  --far: #5aa0bd; --peak: #fff2c4; --mid: #2f7fa3; --near: #1e2f3a;
 }
 
 [data-theme="rockies"] {
   --bg: #16213a; --level: #5b6f8f; --level-alpha: 0.92; --ink: #eef2f7;
-  --edge: url("art/peaks.svg"); --edge-h: 56px;
+  --scene-far: url("art/rockies-far.svg"); --scene-peak: url("art/rockies-peak.svg"); --scene-mid: url("art/rockies-mid.svg"); --scene-near: url("art/rockies-near.svg");
+  --far: #6d5a8a; --peak: #eef2f7; --mid: #3b3f66; --near: #0d1020;
 }
 [data-theme="rockies"].break {
   --bg: #e8eef5; --level: #a9bdd6; --level-alpha: 0.8; --ink: #1f2a3d;
+  --far: #9aa6bf; --peak: #ffffff; --mid: #5b6f8f; --near: #1f2a3d;
 }
 
 [data-theme="texas"] {
   --bg: #00205b; --level: #bf0a30; --level-alpha: 1; --ink: #ffffff;
-  --sky: url("art/lone-star.svg"); --sky-size: 150px 150px; --sky-repeat: no-repeat; --sky-position: center 18%;
+  --scene-far: url("art/texas-far.svg"); --scene-peak: url("art/texas-peak.svg"); --scene-mid: url("art/texas-mid.svg"); --scene-near: url("art/texas-near.svg");
+  --far: #c9a26a; --peak: #ffffff; --mid: #e7d7b3; --near: #2a1a12;
 }
 [data-theme="texas"].break {
   --bg: #e9e4d8; --level: #5b62b5; --level-alpha: 0.6; --ink: #1c1a2b;
-  --sky: none;
+  --far: #b59a6c; --peak: #ffffff; --mid: #f6f0e2; --near: #2a1a12;
 }
 
-[data-theme="new-england"] {
+[data-theme="foliage"] {
   --bg: #2b1d1a; --level: #c8502e; --level-alpha: 0.88; --ink: #f6ecdc;
+  --scene-far: url("art/foliage-far.svg"); --scene-mid: url("art/foliage-mid.svg"); --scene-near: url("art/foliage-near.svg");
+  --far: #7a4a3a; --mid: #f6ecdc; --near: #e0a02a;
 }
-[data-theme="new-england"].break {
+[data-theme="foliage"].break {
   --bg: #22303a; --level: #a8bcc4; --level-alpha: 0.5; --ink: #f0f4f5;
+  --far: #4d6470; --mid: #f0f4f5; --near: #b9542e;
 }
 
-[data-theme="new-york"] {
+[data-theme="empire"] {
   --bg: #d9d9d2; --level: #f2b705; --level-alpha: 0.95; --ink: #121212;
+  --scene-far: url("art/empire-far.svg"); --scene-mid: url("art/empire-mid.svg"); --scene-near: url("art/empire-near.svg");
+  --far: #8f8f88; --mid: #3c3c3a; --near: #121212;
 }
-[data-theme="new-york"].break {
+[data-theme="empire"].break {
   --bg: #1c1f26; --level: #3f4a6b; --level-alpha: 0.85; --ink: #f2f2f2;
+  --far: #4a5068; --mid: #d8d3c0; --near: #0b0d12;
 }
 
-[data-theme="florida"] {
+[data-theme="sunshine"] {
   --bg: #bfe9f2; --level: #ff8c69; --level-alpha: 0.9; --ink: #1d2b33;
+  --scene-far: url("art/sunshine-far.svg"); --scene-mid: url("art/sunshine-mid.svg"); --scene-near: url("art/sunshine-near.svg");
+  --far: #ffffff; --mid: #1f7a8c; --near: #1d2b33;
 }
-[data-theme="florida"].break {
+[data-theme="sunshine"].break {
   --bg: #d9f2ec; --level: #ffd166; --level-alpha: 0.8; --ink: #13343a;
+  --far: #ffffff; --mid: #2a8f7a; --near: #13343a;
 }
 
-[data-theme="chicago"] {
+[data-theme="windy"] {
   --bg: #0c0c0e; --level: #55606b; --level-alpha: 0.8; --ink: #ececec;
-  --sky: url("art/chicago-stars.svg"); --sky-size: 200px 50px; --sky-repeat: no-repeat; --sky-position: center 14%;
+  --scene-far: url("art/windy-far.svg"); --scene-peak: url("art/windy-peak.svg"); --scene-mid: url("art/windy-mid.svg"); --scene-near: url("art/windy-near.svg");
+  --far: #3a3f47; --peak: #ff0000; --mid: #8a929c; --near: #000000;
 }
-[data-theme="chicago"].break {
+[data-theme="windy"].break {
   --bg: #b3ddf2; --level: #7fb4d1; --level-alpha: 0.6; --ink: #0c1a22;
+  --far: #5c7a8c; --peak: #ff0000; --mid: #e8f2f8; --near: #0c1a22;
 }
 
-[data-theme="hawaii"] {
+[data-theme="aloha"] {
   --bg: #0f3d5c; --level: #1f8f86; --level-alpha: 0.85; --ink: #f4fbf9;
+  --scene-far: url("art/aloha-far.svg"); --scene-mid: url("art/aloha-mid.svg"); --scene-near: url("art/aloha-near.svg");
+  --far: #2f6b6a; --mid: #9fdcd2; --near: #061a22;
 }
-[data-theme="hawaii"].break {
+[data-theme="aloha"].break {
   --bg: #fff4e6; --level: #ffb7c5; --level-alpha: 0.9; --ink: #3a2330;
+  --far: #7fb7ad; --mid: #ffffff; --near: #3a2330;
 }
 
-[data-theme="alaska"] {
+[data-theme="frontier"] {
   --bg: #0f204b; --level: #3ddc97; --level-alpha: 0.55; --ink: #ffffff;
-  --sky: url("art/dipper.svg"); --sky-size: 220px 165px; --sky-repeat: no-repeat; --sky-position: right 6% top 7%;
+  --scene-far: url("art/frontier-far.svg"); --scene-peak: url("art/frontier-peak.svg"); --scene-mid: url("art/frontier-mid.svg"); --scene-near: url("art/frontier-near.svg");
+  --far: #4b5f8c; --peak: #f4f7fb; --mid: #a9c6d9; --near: #050b1a;
 }
-[data-theme="alaska"].break {
+[data-theme="frontier"].break {
   --bg: #e8eef3; --level: #a9c6d9; --level-alpha: 0.8; --ink: #14243a;
-  --sky: none;
+  --far: #8ea3bd; --peak: #ffffff; --mid: #c9d8e4; --near: #14243a;
 }
 
 * { box-sizing: border-box; }
@@ -175,33 +214,34 @@ body {
   pointer-events: none;
 }
 
-/* Some regions cut the level's top edge into a silhouette. */
-.level::before {
-  content: "";
-  position: absolute;
+/* ----- the scene: a poster illustration under the timer ----- */
+
+.scene {
+  position: fixed;
   left: 0;
   right: 0;
-  bottom: 100%;
-  height: var(--edge-h, 0px);
-  background: var(--level);
-  -webkit-mask-image: var(--edge, none);
-  -webkit-mask-repeat: repeat-x;
-  -webkit-mask-position: bottom;
-  -webkit-mask-size: auto 100%;
-  mask-image: var(--edge, none);
-  mask-repeat: repeat-x;
-  mask-position: bottom;
-  mask-size: auto 100%;
+  bottom: 0;
+  top: var(--stage-h);
+  pointer-events: none;
 }
 
-body.paused .level {
-  animation: breathe 3.2s ease-in-out infinite;
+.scene i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  -webkit-mask-size: cover;
+  -webkit-mask-position: center bottom;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: cover;
+  mask-position: center bottom;
+  mask-repeat: no-repeat;
+  transition: background-color 600ms ease;
 }
 
-@keyframes breathe {
-  0%, 100% { opacity: var(--level-alpha); }
-  50% { opacity: calc(var(--level-alpha) * 0.55); }
-}
+.scene .far  { background: var(--far);  -webkit-mask-image: var(--scene-far);  mask-image: var(--scene-far); }
+.scene .peak { background: var(--peak); -webkit-mask-image: var(--scene-peak); mask-image: var(--scene-peak); }
+.scene .mid  { background: var(--mid);  -webkit-mask-image: var(--scene-mid);  mask-image: var(--scene-mid); }
+.scene .near { background: var(--near); -webkit-mask-image: var(--scene-near); mask-image: var(--scene-near); }
 
 /* ----- layout ----- */
 
@@ -209,7 +249,7 @@ body.paused .level {
   position: relative;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  height: 100%;
+  height: var(--stage-h);
   padding:
     max(16px, env(safe-area-inset-top))
     max(24px, env(safe-area-inset-right))
