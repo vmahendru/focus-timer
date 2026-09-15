@@ -1,6 +1,6 @@
 # Focus
 
-One task, one timer.
+One task, one timer. Live at <https://vmahendru.github.io/focus-timer/>.
 
 A pomodoro timer that shows the single thing you are working on and how much
 time is left, readable from across a room. The band of colour drains as the
