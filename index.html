@@ -54,23 +54,8 @@
   </main>
 
   <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
-  <aside class="sheet" id="sheet" hidden aria-label="Settings">
+  <aside class="sheet" id="sheet" hidden aria-label="Settings" tabindex="-1">
     <form id="settings-form">
-      <h2>Lengths, in minutes</h2>
-      <div class="fields">
-        <label>Focus <input type="number" name="focus" min="1" max="180" inputmode="numeric" required></label>
-        <label>Short break <input type="number" name="short" min="1" max="60" inputmode="numeric" required></label>
-        <label>Long break <input type="number" name="long" min="1" max="120" inputmode="numeric" required></label>
-        <label>Long break after <input type="number" name="cycle" min="1" max="12" inputmode="numeric" required> sessions</label>
-      </div>
-
-      <h2>When a session ends</h2>
-      <div class="fields">
-        <label class="check"><input type="checkbox" name="sound"> Play a chime</label>
-        <label class="check"><input type="checkbox" name="notify" id="notify"> Show a notification</label>
-        <p class="hint" id="notify-hint" hidden></p>
-      </div>
-
       <h2>Colours</h2>
       <div class="themes" id="themes" role="group" aria-label="Colour scheme">
         <button type="button" data-theme="old-glory" aria-pressed="true"><span class="swatch" data-theme="old-glory"></span>Old Glory</button>
@@ -88,8 +73,25 @@
         <button type="button" data-theme="alaska" aria-pressed="false"><span class="swatch" data-theme="alaska"></span>Alaska</button>
       </div>
 
+      <h2>Lengths, in minutes</h2>
+      <div class="fields">
+        <label>Focus <input type="number" name="focus" min="1" max="180" inputmode="numeric" required></label>
+        <label>Short break <input type="number" name="short" min="1" max="60" inputmode="numeric" required></label>
+        <label>Long break <input type="number" name="long" min="1" max="120" inputmode="numeric" required></label>
+        <label>Long break after <input type="number" name="cycle" min="1" max="12" inputmode="numeric" required> sessions</label>
+      </div>
+
+      <h2>When a session ends</h2>
+      <div class="fields">
+        <label class="check"><input type="checkbox" name="sound"> Play a chime</label>
+        <label class="check"><input type="checkbox" name="notify" id="notify"> Show a notification</label>
+        <p class="hint" id="notify-hint" hidden></p>
+      </div>
+
       <h2>Keys</h2>
       <p class="keys"><kbd>Space</kbd> start or pause &nbsp; <kbd>R</kbd> reset &nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> session type &nbsp; <kbd>T</kbd> edit task</p>
+
+      <p class="version" id="version"></p>
 
       <div class="sheet-actions">
         <button class="primary" type="submit">Save</button>

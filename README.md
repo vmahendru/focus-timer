@@ -88,7 +88,10 @@ python3 -m http.server     # then open http://localhost:8000
 
 `timer.js` is pure logic with no DOM access and is the only file with tests.
 `app.js` wires it to the page. `sw.js` is the offline cache; bump `VERSION`
-there when you change any file so installed copies pick up the update.
+there and `APP_VERSION` in `app.js` when you change any file. Installed copies
+check for a newer version whenever they come to the front and reload once it
+has downloaded, unless a session is running, in which case it shows on the
+next launch. The version number is at the bottom of the settings sheet.
 
 ## License
 

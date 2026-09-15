@@ -5,6 +5,7 @@
   var STATE_KEY = 'focus.state';
   var TASK_KEY = 'focus.task';
   var THEME_KEY = 'focus.theme';
+  var APP_VERSION = '5';
 
   var $ = function (sel) { return document.querySelector(sel); };
   var body = document.body;
@@ -290,7 +291,8 @@
     sheet.hidden = false;
     backdrop.hidden = false;
     settingsButton.setAttribute('aria-expanded', 'true');
-    form.focus.focus();
+    sheet.scrollTop = 0;
+    sheet.focus();
   }
 
   function closeSheet() {
@@ -371,9 +373,25 @@
     }
   });
 
+  $('#version').textContent = 'Version ' + APP_VERSION;
+
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    var registration = null;
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () { /* offline install is optional */ });
+      navigator.serviceWorker.register('sw.js')
+        .then(function (reg) { registration = reg; })
+        .catch(function () { /* offline install is optional */ });
+    });
+    // Look for a newer version each time the app comes to the front.
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible' && registration) registration.update();
+    });
+    // When a newer version takes over, reload once so it shows straight away.
+    // Only when there was an old controller: a first install never reloads.
+    var hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (hadController && !state.running) location.reload();
+      hadController = true;
     });
   }
 
