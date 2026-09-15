@@ -70,17 +70,17 @@ for American places, drawn as flat silhouettes in the scheme's own colours:
 | Scheme | Place |
 | --- | --- |
 | Spirit of '76 | The flag, the Capitol, fireworks and a field cannon |
-| The Mountain Is Out | Rainier behind the Space Needle |
-| Fog Over the Gate | The Golden Gate in Marin fog |
-| Endless Summer | A Southern California sunset, pier and palms |
-| Purple Mountain Majesty | The Rockies, snow and a cabin |
-| Deep in the Heart | The lone star, the Alamo, a windmill and a pumpjack |
-| Leaf Peeper | A New England steeple, barn and lighthouse in fall |
-| Empire State | Midtown behind the Brooklyn Bridge |
-| Sunshine State | The Space Coast, Art Deco Miami, flamingos and palms |
-| Windy City Noir | The Chicago skyline, the El and the Bean |
-| Mauka to Makai | Diamond Head, surf and an outrigger canoe |
-| The Last Frontier | Denali, a glacier, spruce and the Big Dipper |
+| Rainier Over Seattle | Mount Rainier behind the Space Needle, Pacific Northwest |
+| Golden Gate Fog | The Golden Gate in Marin fog, Northern California |
+| Santa Monica Sunset | Pier, ferris wheel and palms, Southern California |
+| Rocky Mountain High | The Rockies, snow and a cabin |
+| Deep in the Heart of Texas | The lone star, the Alamo, a windmill and a pumpjack |
+| New England October | A New England steeple, barn and lighthouse in fall |
+| New York Minute | Midtown behind the Brooklyn Bridge |
+| Florida Space Coast | The Space Coast, Art Deco Miami, flamingos and palms |
+| Chicago Noir | The Chicago skyline, the El and the Bean |
+| Aloha, Waikiki | Diamond Head, surf and an outrigger canoe |
+| Alaskan Frontier | Denali, a glacier, spruce and the Big Dipper |
 
 Ink & Paper is plain black and white with no scene.
 

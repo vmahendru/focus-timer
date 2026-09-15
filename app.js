@@ -5,7 +5,7 @@
   var STATE_KEY = 'focus.state';
   var TASK_KEY = 'focus.task';
   var THEME_KEY = 'focus.theme';
-  var APP_VERSION = '6';
+  var APP_VERSION = '7';
 
   var $ = function (sel) { return document.querySelector(sel); };
   var body = document.body;
