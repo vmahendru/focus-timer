@@ -1,5 +1,5 @@
 // Offline cache. Bump VERSION whenever any of the listed files changes.
-const VERSION = 'focus-v2';
+const VERSION = 'focus-v3';
 const FILES = [
   './',
   './index.html',

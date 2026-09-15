@@ -4,25 +4,64 @@
    reading the digits. Everything else stays quiet. */
 
 :root {
-  --bg: #1c2140;
-  --level: #e9a23b;
-  --level-alpha: 0.72;
-  --ink: #f5f1e8;
-  --ink-soft: rgba(245, 241, 232, 0.62);
-  --ink-faint: rgba(245, 241, 232, 0.5);
-  --line: rgba(245, 241, 232, 0.16);
-  --focus-ring: #ffd27a;
-  --sheet: #262c52;
   --font: ui-rounded, "SF Pro Rounded", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
 }
 
-body[data-mode="short"],
-body[data-mode="long"] {
-  --bg: #1d3a35;
-  --level: #8ad4bb;
-  --level-alpha: 0.42;
-  --focus-ring: #b8f0dd;
-  --sheet: #274841;
+/* Derived on every element so each one mixes from its own inherited
+   --ink, --bg and --level (the swatches carry their own scheme). */
+* {
+  --ink-soft: color-mix(in srgb, var(--ink) 62%, transparent);
+  --ink-faint: color-mix(in srgb, var(--ink) 50%, transparent);
+  --line: color-mix(in srgb, var(--ink) 18%, transparent);
+  --wash: color-mix(in srgb, var(--ink) 11%, transparent);
+  --sheet: color-mix(in srgb, var(--bg) 86%, var(--ink));
+  --focus-ring: var(--ink);
+  --filled: color-mix(in srgb, var(--level) calc(var(--level-alpha) * 100%), var(--bg));
+}
+
+/* Colour schemes. Each one sets the focus look, then the break look.
+   The same rules paint the swatches in the settings sheet. */
+
+:root, [data-theme="amber"] {
+  --bg: #1c2140; --level: #e9a23b; --level-alpha: 0.72; --ink: #f5f1e8;
+}
+[data-theme="amber"].break {
+  --bg: #1d3a35; --level: #8ad4bb; --level-alpha: 0.42;
+}
+
+[data-theme="flag"] {
+  --bg: #0b2a5b; --level: #c8102e; --level-alpha: 0.88; --ink: #ffffff;
+}
+[data-theme="flag"].break {
+  --bg: #ffffff; --level: #0b2a5b; --level-alpha: 0.2; --ink: #0b2a5b;
+}
+
+[data-theme="mono"] {
+  --bg: #000000; --level: #ffffff; --level-alpha: 0.18; --ink: #ffffff;
+}
+[data-theme="mono"].break {
+  --bg: #ffffff; --level: #000000; --level-alpha: 0.1; --ink: #000000;
+}
+
+[data-theme="evergreen"] {
+  --bg: #0f2b22; --level: #3f7d5a; --level-alpha: 0.8; --ink: #eef3ee;
+}
+[data-theme="evergreen"].break {
+  --bg: #2b3d46; --level: #9fbecb; --level-alpha: 0.42;
+}
+
+[data-theme="chalk"] {
+  --bg: #ededea; --level: #bcc3c9; --level-alpha: 0.85; --ink: #17191c;
+}
+[data-theme="chalk"].break {
+  --bg: #e4ebe6; --level: #a4c4b0; --level-alpha: 0.7;
+}
+
+[data-theme="dusk"] {
+  --bg: #2a1b3d; --level: #e0708a; --level-alpha: 0.7; --ink: #fbeff2;
+}
+[data-theme="dusk"].break {
+  --bg: #1f2a44; --level: #8fa8e8; --level-alpha: 0.5;
 }
 
 * { box-sizing: border-box; }
@@ -264,7 +303,7 @@ input:focus-visible {
 
 .modes button[aria-pressed="true"] {
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--wash);
 }
 
 .icon-button {
@@ -299,6 +338,7 @@ input:focus-visible {
   border-radius: 22px 22px 0 0;
   padding: 24px 24px max(24px, env(safe-area-inset-bottom));
   box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
+  color: var(--ink);
 }
 
 @media (min-width: 720px) {
@@ -342,7 +382,7 @@ input:focus-visible {
   font-variant-numeric: tabular-nums;
   text-align: right;
   color: var(--ink);
-  background: rgba(0, 0, 0, 0.22);
+  background: var(--wash);
   border: 1px solid var(--line);
   border-radius: 10px;
 }
@@ -388,6 +428,39 @@ kbd {
 
 .sheet-actions .primary,
 .sheet-actions .quiet { grid-area: auto; height: 50px; }
+
+/* ----- colour scheme swatches ----- */
+
+.themes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.themes button {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  padding: 4px 4px 6px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.themes button[aria-pressed="true"] {
+  color: var(--ink);
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.themes .swatch {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(var(--bg) 0 46%, var(--filled) 46%);
+  box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.35);
+}
 
 /* ----- utilities ----- */
 

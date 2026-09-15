@@ -4,6 +4,7 @@
   var SETTINGS_KEY = 'focus.settings';
   var STATE_KEY = 'focus.state';
   var TASK_KEY = 'focus.task';
+  var THEME_KEY = 'focus.theme';
 
   var $ = function (sel) { return document.querySelector(sel); };
   var body = document.body;
@@ -20,6 +21,8 @@
   var form = $('#settings-form');
   var notifyBox = $('#notify');
   var notifyHint = $('#notify-hint');
+  var themeButtons = Array.prototype.slice.call(document.querySelectorAll('.themes button'));
+  var themeColor = document.querySelector('meta[name="theme-color"]');
 
   // ----- persistence -----
 
@@ -66,6 +69,8 @@
 
     levelEl.style.setProperty('--progress', Timer.progress(state, settings, now).toFixed(4));
     body.dataset.mode = state.mode;
+    body.classList.toggle('break', state.mode !== 'focus');
+    syncThemeColor();
     body.classList.toggle('paused', !state.running && ms < settings[state.mode] * 60000);
     toggleEl.textContent = state.running ? 'Pause' : (ms === 0 ? 'Start' : (ms < settings[state.mode] * 60000 ? 'Resume' : 'Start'));
 
@@ -244,6 +249,31 @@
     fitTask();
   });
   window.addEventListener('resize', fitTask);
+
+  // ----- colour scheme -----
+
+  var THEMES = ['amber', 'flag', 'mono', 'evergreen', 'chalk', 'dusk'];
+
+  function applyTheme(name) {
+    if (THEMES.indexOf(name) === -1) name = 'amber';
+    body.dataset.theme = name;
+    themeButtons.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.theme === name));
+    });
+    save(THEME_KEY, name);
+    syncThemeColor();
+  }
+
+  function syncThemeColor() {
+    var bg = getComputedStyle(body).backgroundColor;
+    if (bg && themeColor.content !== bg) themeColor.content = bg;
+  }
+
+  themeButtons.forEach(function (b) {
+    b.addEventListener('click', function () { applyTheme(b.dataset.theme); });
+  });
+
+  applyTheme(load(THEME_KEY, 'amber'));
 
   // ----- settings sheet -----
 

@@ -16,7 +16,7 @@
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="stylesheet" href="style.css">
 </head>
-<body data-mode="focus">
+<body data-mode="focus" data-theme="amber">
 
   <div class="level" id="level" aria-hidden="true"></div>
 
@@ -69,6 +69,16 @@
         <label class="check"><input type="checkbox" name="sound"> Play a chime</label>
         <label class="check"><input type="checkbox" name="notify" id="notify"> Show a notification</label>
         <p class="hint" id="notify-hint" hidden></p>
+      </div>
+
+      <h2>Colours</h2>
+      <div class="themes" id="themes" role="group" aria-label="Colour scheme">
+        <button type="button" data-theme="amber" aria-pressed="true"><span class="swatch" data-theme="amber"></span>Amber</button>
+        <button type="button" data-theme="flag" aria-pressed="false"><span class="swatch" data-theme="flag"></span>Old Glory</button>
+        <button type="button" data-theme="mono" aria-pressed="false"><span class="swatch" data-theme="mono"></span>Monochrome</button>
+        <button type="button" data-theme="evergreen" aria-pressed="false"><span class="swatch" data-theme="evergreen"></span>Evergreen</button>
+        <button type="button" data-theme="chalk" aria-pressed="false"><span class="swatch" data-theme="chalk"></span>Chalk</button>
+        <button type="button" data-theme="dusk" aria-pressed="false"><span class="swatch" data-theme="dusk"></span>Dusk</button>
       </div>
 
       <h2>Keys</h2>

@@ -63,7 +63,11 @@ Type your one task at the top. Press Start. That is the whole app.
 | 1, 2, 3 | Focus, short break, long break |
 | T | Edit the task |
 
-Session lengths, the chime and notifications are under the gear icon.
+Session lengths, the chime, notifications and the colour scheme are under the
+gear icon. Six schemes ship: Amber, Old Glory, Monochrome, Evergreen, Chalk
+and Dusk. Each one paints focus and break sessions differently. To add your
+own, copy one of the `[data-theme]` blocks in `style.css`, give it a name, and
+add a matching button in the Colours section of `index.html`.
 Defaults are 25 minutes of focus, 5 minutes of short break and a 15 minute
 long break after every 4 sessions. Dots under the clock count focus sessions
 finished today.
