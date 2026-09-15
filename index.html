@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Focus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="One task, one timer.">
+  <meta name="theme-color" content="#1c2140">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Focus">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-mode="focus">
+
+  <div class="level" id="level" aria-hidden="true"></div>
+
+  <main class="stage">
+    <header class="top">
+      <button class="icon-button" id="settings-button" type="button" aria-label="Settings" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="focus-area">
+      <label class="task">
+        <span class="visually-hidden">Your one task</span>
+        <textarea id="task" rows="1" placeholder="What is the one thing?" autocomplete="off" autocapitalize="sentences" spellcheck="false" maxlength="140"></textarea>
+      </label>
+
+      <div class="clock" id="clock" role="timer" aria-live="off">25:00</div>
+
+      <div class="sessions" id="sessions" aria-label="Focus sessions completed today"></div>
+    </section>
+
+    <footer class="controls">
+      <button class="primary" id="toggle" type="button">Start</button>
+      <button class="quiet" id="reset" type="button">Reset</button>
+
+      <nav class="modes" aria-label="Session type">
+        <button type="button" data-mode="focus" aria-pressed="true">Focus</button>
+        <button type="button" data-mode="short" aria-pressed="false">Short break</button>
+        <button type="button" data-mode="long" aria-pressed="false">Long break</button>
+      </nav>
+    </footer>
+  </main>
+
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <aside class="sheet" id="sheet" hidden aria-label="Settings">
+    <form id="settings-form">
+      <h2>Lengths, in minutes</h2>
+      <div class="fields">
+        <label>Focus <input type="number" name="focus" min="1" max="180" inputmode="numeric" required></label>
+        <label>Short break <input type="number" name="short" min="1" max="60" inputmode="numeric" required></label>
+        <label>Long break <input type="number" name="long" min="1" max="120" inputmode="numeric" required></label>
+        <label>Long break after <input type="number" name="cycle" min="1" max="12" inputmode="numeric" required> sessions</label>
+      </div>
+
+      <h2>When a session ends</h2>
+      <div class="fields">
+        <label class="check"><input type="checkbox" name="sound"> Play a chime</label>
+        <label class="check"><input type="checkbox" name="notify" id="notify"> Show a notification</label>
+        <p class="hint" id="notify-hint" hidden></p>
+      </div>
+
+      <h2>Keys</h2>
+      <p class="keys"><kbd>Space</kbd> start or pause &nbsp; <kbd>R</kbd> reset &nbsp; <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> session type &nbsp; <kbd>T</kbd> edit task</p>
+
+      <div class="sheet-actions">
+        <button class="primary" type="submit">Save</button>
+        <button class="quiet" type="button" id="sheet-close">Cancel</button>
+      </div>
+    </form>
+  </aside>
+
+  <script src="timer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

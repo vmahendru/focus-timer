@@ -1,0 +1,407 @@
+/* Focus: one task, one clock.
+   The memorable element is the level: a band of colour that drains as the
+   session runs, so time left is readable from across a room without
+   reading the digits. Everything else stays quiet. */
+
+:root {
+  --bg: #1c2140;
+  --level: #e9a23b;
+  --level-alpha: 0.72;
+  --ink: #f5f1e8;
+  --ink-soft: rgba(245, 241, 232, 0.62);
+  --ink-faint: rgba(245, 241, 232, 0.5);
+  --line: rgba(245, 241, 232, 0.16);
+  --focus-ring: #ffd27a;
+  --sheet: #262c52;
+  --font: ui-rounded, "SF Pro Rounded", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+body[data-mode="short"],
+body[data-mode="long"] {
+  --bg: #1d3a35;
+  --level: #8ad4bb;
+  --level-alpha: 0.42;
+  --focus-ring: #b8f0dd;
+  --sheet: #274841;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  transition: background-color 600ms ease;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ----- the level ----- */
+
+.level {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background: var(--level);
+  opacity: var(--level-alpha);
+  transform-origin: bottom;
+  transform: scaleY(var(--progress, 1));
+  transition: transform 1000ms linear, background-color 600ms ease;
+  pointer-events: none;
+}
+
+body.paused .level {
+  animation: breathe 3.2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: var(--level-alpha); }
+  50% { opacity: calc(var(--level-alpha) * 0.55); }
+}
+
+/* ----- layout ----- */
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(24px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom))
+    max(24px, env(safe-area-inset-left));
+}
+
+.top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.focus-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2vh, 20px);
+  text-align: center;
+  min-height: 0;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "toggle reset"
+    "modes modes";
+  gap: 14px 12px;
+  max-width: 440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ----- task ----- */
+
+.task {
+  display: block;
+  width: min(100%, 34ch);
+}
+
+.task textarea {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 6px 4px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: clamp(1.25rem, 2.6vw + 0.6rem, 1.9rem);
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  resize: none;
+  overflow: hidden;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+  transition: border-color 200ms ease;
+}
+
+.task textarea::placeholder {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.task textarea:focus {
+  border-bottom-color: var(--ink-soft);
+}
+
+/* ----- clock ----- */
+
+.clock {
+  font-size: clamp(5.5rem, 26vw, 15rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  margin-top: clamp(4px, 1.5vh, 16px);
+}
+
+@media (min-aspect-ratio: 4/3) {
+  .clock { font-size: clamp(6rem, 24vh, 15rem); }
+  .task { width: min(100%, 44ch); }
+}
+
+/* ----- session dots: one per focus session, filled when done ----- */
+
+.sessions {
+  display: flex;
+  gap: 10px;
+  min-height: 12px;
+}
+
+.sessions i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-soft);
+}
+
+.sessions i.done {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.sessions i.extra {
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 12px;
+  color: var(--ink-soft);
+}
+
+/* ----- buttons ----- */
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.primary {
+  grid-area: toggle;
+  height: 56px;
+  border-radius: 28px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 1.15rem;
+  font-weight: 600;
+  transition: transform 120ms ease, background-color 600ms ease, color 600ms ease;
+}
+
+.primary:active { transform: scale(0.97); }
+
+.quiet {
+  grid-area: reset;
+  height: 56px;
+  padding: 0 20px;
+  border-radius: 28px;
+  border: 1.5px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.quiet:hover { color: var(--ink); border-color: var(--ink-soft); }
+
+.modes {
+  grid-area: modes;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.modes button {
+  padding: 8px 14px;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.modes button:hover { color: var(--ink); }
+
+.modes button[aria-pressed="true"] {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+}
+
+.icon-button:hover,
+.icon-button[aria-expanded="true"] { color: var(--ink); }
+
+/* ----- settings sheet ----- */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(100%, 460px);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--sheet);
+  border-radius: 22px 22px 0 0;
+  padding: 24px 24px max(24px, env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 720px) {
+  .sheet {
+    bottom: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 22px;
+  }
+}
+
+.sheet h2 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+.sheet h2 + .fields { margin-bottom: 22px; }
+
+.fields {
+  display: grid;
+  gap: 10px;
+}
+
+.fields label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.fields input[type="number"] {
+  width: 72px;
+  height: 40px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ink);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.fields input[type="number"]::-webkit-inner-spin-button { opacity: 1; }
+
+.fields .check { justify-content: flex-start; }
+
+.fields input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--level);
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.keys {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin: 0 0 22px;
+  line-height: 2;
+}
+
+kbd {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 1px 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+}
+
+.sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+}
+
+.sheet-actions .primary,
+.sheet-actions .quiet { grid-area: auto; height: 50px; }
+
+/* ----- utilities ----- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .level { transition: none; }
+  body.paused .level { animation: none; }
+  body, .primary { transition: none; }
+}
