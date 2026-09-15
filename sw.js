@@ -1,5 +1,5 @@
 // Offline cache. Bump VERSION whenever any of the listed files changes.
-const VERSION = 'focus-v7';
+const VERSION = 'focus-v8';
 const FILES = [
   './',
   './index.html',
@@ -75,6 +75,9 @@ self.addEventListener('activate', (event) => {
 // installed it never needs the network again until a new version ships.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  // The companion's API and board are always live, never cached.
+  const pathname = new URL(event.request.url).pathname;
+  if (pathname.startsWith('/api/') || /board\.(html|css|js)$/.test(pathname)) return;
   event.respondWith(
     caches.match(event.request, { ignoreSearch: true }).then((hit) => {
       if (hit) return hit;

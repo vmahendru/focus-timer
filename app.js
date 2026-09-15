@@ -5,7 +5,7 @@
   var STATE_KEY = 'focus.state';
   var TASK_KEY = 'focus.task';
   var THEME_KEY = 'focus.theme';
-  var APP_VERSION = '7';
+  var APP_VERSION = '8';
 
   var $ = function (sel) { return document.querySelector(sel); };
   var body = document.body;
@@ -142,6 +142,7 @@
     var bodyText = mode === 'focus'
       ? (state.mode === 'long' ? 'Take a long break.' : 'Take a short break.')
       : 'Back to: ' + (taskEl.value.trim() || 'your one thing');
+    if (mode === 'focus') logBlock();
     if (settings.sound) chime();
     if (navigator.vibrate) navigator.vibrate([120, 60, 120]);
     if (settings.notify && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
@@ -366,6 +367,45 @@
     return Math.min(hi, Math.max(lo, Math.round(n)));
   }
 
+  // ----- companion: when served by focus.js, the one task comes from the board -----
+
+  var companionTask = null;
+
+  function companion() {
+    if (location.protocol === 'file:') return;
+    fetch('/api/next', { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error('no companion');
+      return r.json();
+    }).then(function (data) {
+      $('#board-link').hidden = false;
+      companionTask = data.task;
+      if (companionTask) {
+        taskEl.value = companionTask.title;
+        taskEl.readOnly = true;
+        fitTask();
+        $('#task-parent').textContent = companionTask.parentTitle ? 'Part of ' + companionTask.parentTitle : '';
+        $('#task-parent').hidden = !companionTask.parentTitle;
+        $('#task-done').hidden = false;
+      } else {
+        taskEl.readOnly = false;
+        taskEl.placeholder = 'Nothing queued. Add a task on the board.';
+        $('#task-parent').hidden = true;
+        $('#task-done').hidden = true;
+      }
+    }).catch(function () { /* plain timer */ });
+  }
+
+  $('#task-done').addEventListener('click', function () {
+    if (!companionTask) return;
+    fetch('/api/tasks/' + companionTask.id + '/done', { method: 'POST' }).then(companion);
+  });
+
+  // Count a finished focus block against the task it was spent on.
+  function logBlock() {
+    if (!companionTask) return;
+    fetch('/api/tasks/' + companionTask.id + '/block', { method: 'POST' }).then(companion);
+  }
+
   // ----- lifecycle -----
 
   // iOS suspends timers in the background; recompute from the wall clock
@@ -374,6 +414,7 @@
     if (document.visibilityState === 'visible') {
       commit(Timer.forDay(state, today()));
       if (state.running) step();
+      companion();
     }
   });
 
@@ -409,6 +450,7 @@
 
   fitTask();
   render();
+  companion();
   if (state.running) {
     document.addEventListener('pointerdown', unlockOnGesture);
     document.addEventListener('keydown', unlockOnGesture);

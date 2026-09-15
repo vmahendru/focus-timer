@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Board · Focus</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a3161">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="board.css">
+</head>
+<body data-mode="focus" data-theme="spirit" class="board-page">
+
+  <header class="bar">
+    <a class="wordmark" href="./">Focus</a>
+    <nav class="bar-actions">
+      <button type="button" id="new-task">New task</button>
+      <button type="button" id="import-jira" data-needs="jira">Import from Jira</button>
+      <button type="button" id="github-inbox" data-needs="github">GitHub inbox</button>
+      <button type="button" id="open-settings">Connections</button>
+    </nav>
+  </header>
+
+  <section class="next-up" id="next-up">
+    <div class="next-main">
+      <p class="next-label">Next up</p>
+      <h1 class="next-title" id="next-title">Nothing yet. Add a task.</h1>
+      <p class="next-parent" id="next-parent"></p>
+      <div class="next-actions">
+        <a class="primary small" href="./" id="start-link">Start a focus block</a>
+        <button type="button" class="quiet small" id="next-done">Mark done</button>
+      </div>
+    </div>
+    <ol class="plan" id="plan" aria-label="Today's plan"></ol>
+  </section>
+
+  <main class="columns" id="columns">
+    <section class="column" data-status="backlog"><h2>Backlog</h2><div class="cards"></div></section>
+    <section class="column" data-status="next"><h2>Next</h2><div class="cards"></div></section>
+    <section class="column" data-status="doing"><h2>Doing</h2><div class="cards"></div></section>
+    <section class="column" data-status="done"><h2>Done</h2><div class="cards"></div></section>
+  </main>
+
+  <p class="status-line" id="status-line" aria-live="polite"></p>
+
+  <div class="sheet-backdrop" id="drawer-backdrop" hidden></div>
+
+  <aside class="drawer" id="drawer" hidden aria-label="Task">
+    <form id="task-form">
+      <input type="hidden" name="id">
+      <textarea class="title-field" name="title" rows="1" placeholder="What is the task?" required></textarea>
+      <p class="crumb" id="task-crumb"></p>
+
+      <div class="field-row">
+        <label>Status
+          <select name="status">
+            <option value="backlog">Backlog</option><option value="next">Next</option><option value="doing">Doing</option><option value="done">Done</option>
+          </select>
+        </label>
+        <label>Phase
+          <select name="phase">
+            <option value="">None</option><option value="research">Research</option><option value="design">Design</option><option value="implement">Implement</option><option value="verify">Verify</option>
+          </select>
+        </label>
+        <label>Blocks <input type="number" name="blocks" min="0" max="40" inputmode="numeric"></label>
+        <label>Spent <input type="number" name="spent" min="0" max="99" inputmode="numeric"></label>
+      </div>
+
+      <label class="stack">Notes
+        <textarea name="body" rows="5" placeholder="Context, and a line that starts with: Done when:"></textarea>
+      </label>
+
+      <div class="refs" id="task-refs"></div>
+
+      <section class="subtasks" id="subtasks-section">
+        <h3>Subtasks <span id="subtask-count"></span></h3>
+        <ul class="subtask-list" id="subtask-list"></ul>
+        <div class="row-actions">
+          <button type="button" class="small" id="decompose">Decompose</button>
+          <button type="button" class="small" id="copy-prompt">Copy agent prompt</button>
+        </div>
+      </section>
+
+      <section class="links" id="links-section">
+        <h3>Links</h3>
+        <ul id="link-list"></ul>
+        <div class="row-actions">
+          <input type="url" id="new-link" placeholder="https://">
+          <button type="button" class="small" id="add-link">Add</button>
+          <button type="button" class="small" id="find-page" data-needs="confluence">Find a Confluence page</button>
+        </div>
+        <ul class="results" id="page-results" hidden></ul>
+      </section>
+
+      <div class="drawer-actions">
+        <button class="primary" type="submit">Save</button>
+        <button type="button" class="quiet" id="push-jira" data-needs="jira">Push to Jira</button>
+        <button type="button" class="quiet danger" id="delete-task">Delete</button>
+        <button type="button" class="quiet" id="close-drawer">Close</button>
+      </div>
+    </form>
+  </aside>
+
+  <aside class="drawer" id="decompose-drawer" hidden aria-label="Decompose">
+    <h2>Break it down</h2>
+    <p class="hint">A starting point from the built-in template. Edit freely, or paste an agent's proposal instead. Each line is one subtask.</p>
+    <div class="phase-picks" id="phase-picks">
+      <label><input type="checkbox" value="research" checked> Research</label>
+      <label><input type="checkbox" value="design" checked> Design</label>
+      <label><input type="checkbox" value="implement" checked> Implement</label>
+      <label><input type="checkbox" value="verify" checked> Verify</label>
+    </div>
+    <ol class="proposal" id="proposal"></ol>
+    <div class="drawer-actions">
+      <button type="button" class="primary" id="create-subtasks">Create subtasks</button>
+      <button type="button" class="quiet" id="cancel-decompose">Cancel</button>
+    </div>
+  </aside>
+
+  <aside class="drawer" id="import-drawer" hidden aria-label="Import">
+    <h2 id="import-title">Import from Jira</h2>
+    <div class="row-actions" id="jql-row">
+      <input type="text" id="jql" placeholder="JQL">
+      <button type="button" class="small" id="run-jql">Search</button>
+    </div>
+    <ul class="results pick" id="import-results"></ul>
+    <div class="drawer-actions">
+      <button type="button" class="primary" id="import-selected">Add selected to Backlog</button>
+      <button type="button" class="quiet" id="cancel-import">Cancel</button>
+    </div>
+  </aside>
+
+  <aside class="drawer" id="settings-drawer" hidden aria-label="Connections">
+    <form id="settings-form">
+      <h2>Connections</h2>
+      <p class="hint">Saved to <code id="workspace-path"></code> with owner-only permissions. Tokens never leave this machine. Leave a token blank to keep the saved one.</p>
+
+      <h3>Plan</h3>
+      <label class="inline">Focus blocks per day <input type="number" name="blocksPerDay" min="1" max="24"></label>
+
+      <h3>Jira</h3>
+      <label class="inline">Flavour
+        <select name="jira.kind"><option value="dc">Data Center or Server</option><option value="cloud">Cloud</option></select>
+      </label>
+      <label class="stack">Base URL <input type="url" name="jira.baseUrl" placeholder="https://jira.example.com"></label>
+      <label class="stack">Project key <input type="text" name="jira.project" placeholder="PROJ"></label>
+      <label class="stack">Email (Cloud only) <input type="text" name="jira.email"></label>
+      <label class="stack">Token <input type="password" name="jira.token" autocomplete="off"><span class="hint" data-has="jira"></span></label>
+      <label class="stack">Default JQL <input type="text" name="jira.jql"></label>
+
+      <h3>GitHub</h3>
+      <label class="stack">API base URL <input type="url" name="github.baseUrl" placeholder="https://api.github.com"></label>
+      <label class="stack">Token <input type="password" name="github.token" autocomplete="off"><span class="hint" data-has="github"></span></label>
+
+      <h3>Confluence</h3>
+      <label class="inline">Flavour
+        <select name="confluence.kind"><option value="dc">Data Center or Server</option><option value="cloud">Cloud</option></select>
+      </label>
+      <label class="stack">Base URL <input type="url" name="confluence.baseUrl" placeholder="https://wiki.example.com"></label>
+      <label class="stack">Email (Cloud only) <input type="text" name="confluence.email"></label>
+      <label class="stack">Token <input type="password" name="confluence.token" autocomplete="off"><span class="hint" data-has="confluence"></span></label>
+
+      <div class="drawer-actions">
+        <button class="primary" type="submit">Save</button>
+        <button type="button" class="quiet" id="close-settings">Close</button>
+      </div>
+    </form>
+  </aside>
+
+  <script src="board.js"></script>
+</body>
+</html>

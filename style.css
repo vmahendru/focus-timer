@@ -260,7 +260,44 @@ body {
 .top {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
 }
+
+.board-link {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1.5px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.board-link:hover { color: var(--ink); border-color: var(--ink-soft); }
+
+.task-parent {
+  margin: -4px 0 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.task-done {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 17px;
+  border: 1.5px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.task-done:hover { color: var(--ink); border-color: var(--ink-soft); }
+
+.task textarea[readonly] { cursor: default; }
 
 .focus-area {
   display: flex;

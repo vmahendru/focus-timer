@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Focus</title>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="One task, one timer.">
   <meta name="theme-color" content="#0a3161">
@@ -23,6 +23,7 @@
 
   <main class="stage">
     <header class="top">
+      <a class="board-link" id="board-link" href="board.html" hidden>Board</a>
       <button class="icon-button" id="settings-button" type="button" aria-label="Settings" aria-expanded="false">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
           <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
@@ -36,6 +37,9 @@
         <span class="visually-hidden">Your one task</span>
         <textarea id="task" rows="1" placeholder="What is the one thing?" autocomplete="off" autocapitalize="sentences" spellcheck="false" maxlength="140"></textarea>
       </label>
+
+      <p class="task-parent" id="task-parent" hidden></p>
+      <button type="button" class="task-done" id="task-done" hidden>Done, next one</button>
 
       <div class="clock" id="clock" role="timer" aria-live="off">25:00</div>
 

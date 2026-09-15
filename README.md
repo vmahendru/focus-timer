@@ -96,15 +96,61 @@ The timer keeps time from the wall clock, so it stays accurate when the phone
 is locked or the tab is in the background. It never starts the next session
 on its own.
 
+## The board: a scheduler for your work
+
+The timer answers "how long". The board answers "what next". Start the
+companion instead of the plain server and the timer's one-task line fills
+itself from a personal Kanban:
+
+```sh
+node focus.js            # http://127.0.0.1:8080/  and  /board.html
+node focus.js --demo     # a throwaway workspace with fake Jira, GitHub and Confluence
+```
+
+What it does:
+
+- **Tasks are files.** Every task is one Markdown file in `~/Focus/tasks/`
+  with a short header (status, parent, phase, blocks) and free notes. Edit
+  them in any editor. The board watches the folder and updates live.
+- **Decompose.** Break a task into subtasks by phase: research, design,
+  implement, verify. The built-in template gives you an editable starting
+  point. For a better breakdown, "Copy agent prompt" puts a ready-made
+  prompt on the clipboard for whatever agent you use, and that agent writes
+  the subtask files directly. See `agent/README.md`.
+- **Next up.** The scheduler always shows the smallest unfinished step of
+  the most active task, in phase order, plus a plan for today sized to your
+  focus blocks. The timer shows that step as its one task, counts each
+  finished block against it, and "Done, next one" advances.
+- **Jira.** Import issues by JQL, push a task and its subtasks to Jira as an
+  issue with sub-tasks, and keep the keys on the cards. Data Center and
+  Server with a personal access token, or Cloud with an email and API token.
+- **GitHub.** Pull assigned issues and review requests onto the board.
+- **Confluence.** Search pages and attach them as links on a task.
+
+Set connections up under "Connections" on the board. They are saved to
+`~/Focus/config.json` with owner-only permissions. Tokens can also come from
+`FOCUS_JIRA_TOKEN`, `FOCUS_GITHUB_TOKEN` and `FOCUS_CONFLUENCE_TOKEN` in the
+environment. Use `--workspace <dir>` or `FOCUS_WORKSPACE` to keep the files
+somewhere else, for example a private git repository.
+
+**For compliance reviews.** The companion listens on 127.0.0.1 only. It has
+no dependencies. It makes network requests only to the Jira, GitHub and
+Confluence hosts you configure, only when you trigger an action, using your
+own token. It never contacts any other service, sends no telemetry, calls
+no model, and stores nothing outside the workspace folder on your disk.
+
 ## Develop
 
 ```sh
-node --test test/          # timer logic
-python3 -m http.server     # then open http://localhost:8000
+node --test test/*.test.js   # timer logic, task files, scheduler, integrations, and the companion API
+python3 tools/scenes.py      # redraw the poster scenes
 ```
 
-`timer.js` is pure logic with no DOM access and is the only file with tests.
-`app.js` wires it to the page. `sw.js` is the offline cache; bump `VERSION`
+`timer.js` is the pure timer logic and `app.js` wires it to the page.
+`focus.js` is the companion; `lib/tasks.js` reads and writes task files,
+`lib/scheduler.js` picks what is next, `lib/decompose.js` is the template
+breakdown, and `lib/integrations.js` holds the Jira, GitHub and Confluence
+clients, with fakes in `lib/demo.js`. `sw.js` is the offline cache; bump `VERSION`
 there and `APP_VERSION` in `app.js` when you change any file. Installed copies
 check for a newer version whenever they come to the front and reload once it
 has downloaded, unless a session is running, in which case it shows on the
