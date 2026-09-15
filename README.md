@@ -20,14 +20,37 @@ Screen*. Notifications when a session ends only work from the installed app.
 **Mac:** open the site in Safari and choose *File › Add to Dock*. In Chrome or
 Edge, use the install icon in the address bar.
 
-**Any machine, no hosting:** clone this repository and open `index.html` in a
-browser. Everything works except the offline cache, which browsers only allow
-over http.
+## Run it locally
+
+Nothing about the hosted copy is required. Clone the repository and serve the
+folder from your own machine with the included server, which uses only Node's
+standard library and listens on localhost only:
 
 ```sh
 git clone https://github.com/vmahendru/focus-timer.git
-open focus-timer/index.html
+cd focus-timer
+node serve.js            # http://127.0.0.1:8080/
 ```
+
+Any static server works the same way, for example `python3 -m http.server`.
+You can also open `index.html` straight from the folder with no server at all.
+Everything works that way except the offline cache, which browsers only enable
+over http. Prefer the server on a shared machine: Chromium-based browsers give
+every locally opened file the same storage origin, so another local HTML file
+could read the saved task.
+
+## Your data
+
+The task, the timer state and your settings are stored in the browser's local
+storage for the site origin, on the device you are using. There is no server,
+no account, no sync and no analytics, and the page sets a Content Security
+Policy that forbids the browser from connecting to any host at all. Nothing
+you type is sent anywhere.
+
+Two people using the same operating system account and browser profile on one
+machine share that storage and would see the same task. Separate accounts or
+browser profiles are isolated from each other. To wipe everything, clear the
+site's data in the browser.
 
 ## Use
 

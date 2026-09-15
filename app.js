@@ -345,10 +345,19 @@
     });
   }
 
+  // Browsers only allow sound after a user gesture, so if the page opens
+  // mid-session, arm the chime on the first tap or key press.
+  function unlockOnGesture() {
+    unlockAudio();
+    document.removeEventListener('pointerdown', unlockOnGesture);
+    document.removeEventListener('keydown', unlockOnGesture);
+  }
+
   fitTask();
   render();
   if (state.running) {
-    unlockAudio();
+    document.addEventListener('pointerdown', unlockOnGesture);
+    document.addEventListener('keydown', unlockOnGesture);
     step();
     if (state.running) startLoop();
   }
